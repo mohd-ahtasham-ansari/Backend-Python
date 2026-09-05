@@ -31,4 +31,4 @@ def view_patient(patient_id: str):
 
     if patient_id in data:
         return data[patient_id]
-    return {"message": "patient not found"}
+    return {"error": "patient not found"}
