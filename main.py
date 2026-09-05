@@ -1,6 +1,11 @@
-def main():
-    print("Hello from backend-python!")
+from fastapi import FastAPI
 
+app = FastAPI()
 
-if __name__ == "__main__":
-    main()
+@app.get("/")
+def hello():
+    return {"message":"hello world"}
+
+@app.get("/about")
+def about():
+    return {"message":"campusX is an education platform where you can learn ai"}
