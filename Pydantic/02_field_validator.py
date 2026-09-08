@@ -14,9 +14,9 @@ class Pateint(BaseModel):
     allergies: Optional[List[str]]=None    
     contact_details: Dict[str,str] 
     
-    @field_validator("email")
+    @field_validator("email") # to validate email belongs to the hdfc or icici bank to avail discount
     @classmethod
-    def email_validator(cls, value):
+    def email_validator(cls, value):          
         
         valid_domains =['hdfc.com' , 'icici.com']
         
@@ -26,6 +26,11 @@ class Pateint(BaseModel):
             raise ValueError("Invalid Email Domain")
 
         return value
+
+    @field_validator("name",mode="after")          # using field validator to make our name in proper  format       
+    @classmethod
+    def name_validator(cls , value):     
+        return value.title()
 
 
 def update_pateint(pateint:Pateint):
