@@ -1,4 +1,4 @@
-from pydantic import BaseModel ,EmailStr ,AnyUrl ,Field, field_validator
+from pydantic import BaseModel ,EmailStr ,AnyUrl ,Field, field_validator , model_validator
 from typing import List , Dict ,Optional,Annotated
 
 """
@@ -54,10 +54,10 @@ update_pateint(pateint1)
 
 """                             Test2                          """
 
-patient_info2 ={"name":"rohit", "age":39,"email":"abc@gmail.com","weight":80,"married":False,"contact_details":{"phone":"1234567890","address":"123 Main St"}}
+# patient_info2 ={"name":"rohit", "age":39,"email":"abc@gmail.com","weight":80,"married":False,"contact_details":{"phone":"1234567890","address":"123 Main St"}}
 
-try:
-    pateint2 = Pateint(**patient_info2)
-    update_pateint(pateint2)
-except ValueError as e:
-    print(e)
+# try:
+#     pateint2 = Pateint(**patient_info2)
+#     update_pateint(pateint2)
+# except ValueError as e:
+#     print(e)
