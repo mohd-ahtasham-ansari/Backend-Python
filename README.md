@@ -1,6 +1,15 @@
-# Python Backend & Pydantic Mastery 🚀
+# Python Backend & FastAPI Course 🚀
 
-Welcome to the **Backend-Python** repository! This project serves as a comprehensive hands-on learning guide covering core concepts of **Pydantic v2** data validation, serialization, nested data modeling, computed fields, along with foundational **FastAPI** REST API development.
+Welcome to the **Backend-Python** repository! This repository tracks the complete learning roadmap for Python backend development, focusing on **Pydantic v2** and **FastAPI**.
+
+---
+
+## 📌 Repository Status
+
+| Module | Status | Description |
+| :--- | :--- | :--- |
+| **Pydantic v2** | ✅ **Completed** | Full data validation, custom/model validators, computed fields, nested models, and serialization |
+| **FastAPI** | 🚧 **In Progress / Remaining** | Fundamental GET endpoints & parameter validation covered; CRUD, request bodies, schemas & advanced topics remaining |
 
 ---
 
@@ -8,21 +17,21 @@ Welcome to the **Backend-Python** repository! This project serves as a comprehen
 
 ```text
 Backend-Python/
-├── Pydantic/
-│   ├── 01_pydantic_why.py       # Motivation for Pydantic, BaseModel, Field constraints & metadata
-│   ├── 02_field_validator.py    # Custom field-level validators (@field_validator)
-│   ├── 03_model_validator.py    # Multi-field & root model validators (@model_validator)
-│   ├── 04_computed_field.py     # Dynamically calculated fields (@computed_field)
-│   ├── 05_nested_model.py       # Nested BaseModel schema composition
-│   └── 06_serialization.py      # Serialization to Dict/JSON (model_dump, model_dump_json, exclude)
-├── main.py                      # FastAPI application with path/query validation & endpoints
-├── patients.json                # Sample JSON dataset for FastAPI API operations
-└── README.md                    # Repository documentation
+├── Pydantic/                        # ✅ COMPLETED
+│   ├── 01_pydantic_why.py          # Motivation, BaseModel, Field constraints & metadata
+│   ├── 02_field_validator.py       # Custom field-level validators (@field_validator)
+│   ├── 03_model_validator.py       # Multi-field & root model validators (@model_validator)
+│   ├── 04_computed_field.py        # Dynamically calculated fields (@computed_field)
+│   ├── 05_nested_model.py          # Nested BaseModel schema composition
+│   └── 06_serialization.py         # Dict/JSON serialization (model_dump, model_dump_json, exclude)
+├── main.py                         # 🚧 IN PROGRESS - FastAPI endpoints (Path & Query parameter validation)
+├── patients.json                   # Sample JSON dataset for FastAPI API operations
+└── README.md                       # Repository documentation
 ```
 
 ---
 
-## 🧠 Pydantic Concepts Covered
+## ✅ Module 1: Pydantic Mastery (Completed)
 
 ### 1. Data Validation & Metadata (`01_pydantic_why.py`)
 - **Why Pydantic?**: Replaces repetitive, manual `if`/`else` type and range checks with declarative schema enforcement.
@@ -31,7 +40,7 @@ Backend-Python/
 
 ### 2. Custom Field Validators (`02_field_validator.py`)
 - **`@field_validator`**: Creating custom validation logic for individual attributes.
-- **Validation Modes**: Using `mode='after'` (or default) to format input values (e.g. converting names to title case or validating email domains like `@hdfc.com` / `@icici.com`).
+- **Validation Modes**: Using `mode='after'` (or default) to format input values (e.g. converting names to title case or validating email domains).
 
 ### 3. Model & Cross-Field Validators (`03_model_validator.py`)
 - **`@model_validator(mode='after')`**: Validating dependencies between multiple fields across the model instance.
@@ -51,13 +60,22 @@ Backend-Python/
 
 ---
 
-## 🌐 FastAPI Fundamentals (`main.py`)
+## 🚧 Module 2: FastAPI Development (In Progress / Remaining)
 
-- **Endpoints & Routing**: `@app.get("/")`, `@app.get("/view")`, `@app.get("/patient/{patient_id}")`, `@app.get("/sort")`.
+### Currently Implemented (`main.py`)
+- **Endpoints & Routing**: `@app.get("/")`, `@app.get("/about")`, `@app.get("/view")`, `@app.get("/patient/{patient_id}")`, `@app.get("/sort")`.
 - **Parameter Validation**:
-  - `Path(...)`: Validating path parameters with descriptions and examples in OpenAPI docs.
-  - `Query(...)`: Validating query parameters, setting choices, and handling defaults.
-- **Error Handling**: Raising structured `HTTPException` with appropriate status codes (`400`, `404`).
+  - `Path(...)`: Path parameter validation with OpenAPI descriptions & example values.
+  - `Query(...)`: Query parameter validation, field constraints, default values, and sorting logic (`asc`/`desc`).
+- **Error Handling**: Raising structured `HTTPException` with status codes (`400`, `404`).
+
+### ⏳ Remaining / Upcoming FastAPI Topics
+- [ ] **POST, PUT, DELETE Endpoints**: Creating, updating, and deleting patient records.
+- [ ] **Request Body Validation**: Integrating Pydantic `BaseModel` schemas for API payloads.
+- [ ] **Response Models**: Defining response schemas with `response_model`.
+- [ ] **CRUD Integration**: Updating local JSON storage or database persistent layer.
+- [ ] **Dependency Injection**: Reusable dependencies (`Depends`).
+- [ ] **Middleware & Authentication**: Security protocols, JWT tokens, and CORS configuration.
 
 ---
 
@@ -74,7 +92,7 @@ Make sure you have Python installed and set up your virtual environment:
 pip install pydantic fastapi uvicorn email-validator
 ```
 
-### Running Pydantic Examples
+### Running Pydantic Examples (Completed)
 
 Run any script individually to observe data validation and outputs:
 
@@ -87,7 +105,7 @@ python Pydantic/05_nested_model.py
 python Pydantic/06_serialization.py
 ```
 
-### Running FastAPI Server
+### Running FastAPI Server (In Progress)
 
 Launch the development server using Uvicorn:
 
@@ -103,4 +121,4 @@ Access the interactive API documentation at:
 
 ## 🎯 Summary
 
-This repository encapsulates the core pillars of backend development in Python using **Pydantic v2** and **FastAPI**, establishing solid practices for type safety, request validation, domain modeling, and API construction.
+This repository tracks learning for Python backend development. **Pydantic v2** is fully wrapped up and completed. **FastAPI** is currently underway, starting with GET endpoints and parameter validation, with full CRUD, body validation, and advanced concepts to follow.
