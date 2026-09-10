@@ -10,6 +10,13 @@ def load_data():
         data = json.load(f)
     return data
 
+class Patient(BaseModel):
+    name : str
+    age : int
+    gender : str
+    height : float
+    weight : float
+    bmi : float
 
 @app.get("/")
 def hello():
