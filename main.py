@@ -13,6 +13,7 @@ def load_data():
     return data
 
 class Patient(BaseModel):
+    id: Annotated[str,]
     name : Annotated[str , Field(...,description = "Enter patient name",examples = "John Doe")]
     age : Annotated[int , Field(...,gt=0,lt=120,description = "Enter patient age",examples = 25)]
     gender : Annotated[Literal['Male','Female','Other'] , Field(...,description = "Enter patient gender",examples = "Male")]
@@ -28,7 +29,7 @@ class Patient(BaseModel):
     @computed_field
     @property
     def verdict(self)->str:
-        if self.bmi<18.5 
+        if self.bmi<18.5:
             return "Underweight"
         elif self.bmi>=18.5 and self.bmi<24.9:
             return"Normal"
@@ -84,6 +85,12 @@ def sort_patient(sort_by: str = Query(..., description = "Sort on the basis of H
     
 @app.post('/create')
 def create_patient(patient:Patient):
-    
-    
+    id = self.id
+    name = self.name
+    age = self.age
+    gender = self.gender
+    height = self.height
+    weight = self.weight
+    bmi = self.bmi
+    verdict = self.verdict
     
