@@ -1,9 +1,9 @@
 import json
 
 from fastapi import FastAPI, HTTPException, Path, Query
-from fatapi.response import JSONResponse
-from  pydantic import BaseModel , Annotated ,Field , computed_field
-from typing import Literal
+from fastapi.responses import JSONResponse
+from  pydantic import BaseModel ,Field , computed_field
+from typing import Annotated , Literal
 
 app = FastAPI()
 
@@ -21,30 +21,30 @@ def save_data(data):
 
 # model for creating new data
 class Patient(BaseModel):
-    id: Annotated[str,]
-    name : Annotated[str , Field(...,description = "Enter patient name",examples = "John Doe")]
-    age : Annotated[int , Field(...,gt=0,lt=120,description = "Enter patient age",examples = 25)]
-    gender : Annotated[Literal['Male','Female','Other'] , Field(...,description = "Enter patient gender",examples = "Male")]
-    height : Annotated[float , Field(...,gt=0,description = "Enter patient height",examples = 5.8)]
-    weight : Annotated[float , Field(...,gt=0,description = "Enter patient weight",examples = 70)]
+    id: Annotated[str, Field(..., description="Enter Patient id here", examples=["P001"])]
+    name: Annotated[str, Field(..., description="Enter patient name", examples=["John Doe"])]
+    age: Annotated[int, Field(..., gt=0, lt=120, description="Enter patient age", examples=[25])]
+    gender: Annotated[Literal['Male', 'Female', 'Other'], Field(..., description="Enter patient gender", examples=["Male"])]
+    height: Annotated[float, Field(..., gt=0, description="Enter patient height", examples=[5.8])]
+    weight: Annotated[float, Field(..., gt=0, description="Enter patient weight", examples=[70.0])]
     
     @computed_field
     @property
-    def bmi(self)-> float:
-        bmi=self.weight/(self.height*self.height)
-        return round(bmi,2)
+    def bmi(self) -> float:
+        bmi = self.weight / (self.height * self.height)
+        return round(bmi, 2)
     
     @computed_field
     @property
-    def verdict(self)->str:
-        if self.bmi<18.5:
+    def verdict(self) -> str:
+        if self.bmi < 18.5:
             return "Underweight"
-        elif self.bmi>=18.5 and self.bmi<24.9:
-            return"Normal"
-        elif self.bmi>=25 and self.bmi<29.9:
+        elif self.bmi >= 18.5 and self.bmi < 24.9:
+            return "Normal"
+        elif self.bmi >= 25 and self.bmi < 29.9:
             return "Overweight"
         else:
-            return"Obese"
+            return "Obese"
         
 
 
@@ -63,7 +63,7 @@ def view_patients():
 
 #viewing a specific patient using patient id
 @app.get('/patient/{patient_id}')
-def view_patient(patient_id: str = Path(..., description="Enter Patient id here",  example="P001") ,): # for show example in docs 
+def view_patient(patient_id: str = Path(..., description="Enter Patient id here", examples=["P001"])): # for show example in docs 
     #load all the patient
     data = load_data()
 
@@ -97,7 +97,7 @@ def create_patient(patient:Patient):
     data = load_data()
 
     #check if the patient aready exist
-    if pateint.id in data:
+    if patient.id in data:
         raise HTTPException(status_code=400 , detail=f"patient with id {patient.id} already exist")
 
     #add pateint to data
