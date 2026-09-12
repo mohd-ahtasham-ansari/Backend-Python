@@ -1,6 +1,7 @@
 import json
 
 from fastapi import FastAPI, HTTPException, Path, Query
+from fatapi.response import JSONResponse
 from  pydantic import BaseModel , Annotated ,Field , computed_field
 from typing import Literal
 
@@ -14,11 +15,11 @@ def load_data():
 
 
 # to save updated data
-def save_data():
-    
+def save_data(data):
+    with open("patients.json","w") as f:
+        json.dump(data , f,indent=4)
 
-
-
+# model for creating new data
 class Patient(BaseModel):
     id: Annotated[str,]
     name : Annotated[str , Field(...,description = "Enter patient name",examples = "John Doe")]
@@ -103,3 +104,7 @@ def create_patient(patient:Patient):
     # our data is in pydantic model , we need to convert it into dict using json_dump
     data[patient.id] = patient.model_dump(exclude=['id'])
 
+    # save data into json file
+    save_data(data)
+
+    return JSONResponse(status_code=201 , content={"message":"patient created sucessfully"})
