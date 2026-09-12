@@ -12,6 +12,13 @@ def load_data():
         data = json.load(f)
     return data
 
+
+# to save updated data
+def save_data():
+    
+
+
+
 class Patient(BaseModel):
     id: Annotated[str,]
     name : Annotated[str , Field(...,description = "Enter patient name",examples = "John Doe")]
@@ -85,12 +92,14 @@ def sort_patient(sort_by: str = Query(..., description = "Sort on the basis of H
     
 @app.post('/create')
 def create_patient(patient:Patient):
-    id = self.id
-    name = self.name
-    age = self.age
-    gender = self.gender
-    height = self.height
-    weight = self.weight
-    bmi = self.bmi
-    verdict = self.verdict
-    
+    # load data from database
+    data = load_data()
+
+    #check if the patient aready exist
+    if pateint.id in data:
+        raise HTTPException(status_code=400 , detail=f"patient with id {patient.id} already exist")
+
+    #add pateint to data
+    # our data is in pydantic model , we need to convert it into dict using json_dump
+    data[patient.id] = patient.model_dump(exclude=['id'])
+
