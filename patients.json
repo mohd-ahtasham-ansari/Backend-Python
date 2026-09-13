@@ -41,21 +41,22 @@
     },
     "P005": {
         "name": "Neha Sinha",
-        "city": "Kolkata",
-        "age": 30,
+        "city": "Goa",
+        "age": 50,
         "gender": "female",
         "height": 1.55,
-        "weight": 75,
+        "weight": 75.0,
         "bmi": 31.22,
         "verdict": "Obese"
     },
     "P007": {
         "name": "John Doe",
+        "city": "Delhi",
         "age": 25,
         "gender": "Male",
-        "height": 5.8,
+        "height": 1.75,
         "weight": 70.0,
-        "bmi": 2.08,
-        "verdict": "Underweight"
+        "bmi": 22.86,
+        "verdict": "Normal"
     }
 }
