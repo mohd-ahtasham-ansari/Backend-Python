@@ -58,5 +58,15 @@
         "weight": 70.0,
         "bmi": 22.86,
         "verdict": "Normal"
+    },
+    "P006": {
+        "name": "John Doe",
+        "city": "Delhi",
+        "age": 25,
+        "gender": "Male",
+        "height": 5.8,
+        "weight": 70.0,
+        "bmi": 2.08,
+        "verdict": "Underweight"
     }
 }
