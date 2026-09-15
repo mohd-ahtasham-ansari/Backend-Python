@@ -1,124 +1,196 @@
-# Python Backend & FastAPI Course 🚀
+# Python Backend & FastAPI Applications 🚀
 
-Welcome to the **Backend-Python** repository! This repository tracks the complete learning roadmap for Python backend development, focusing on **Pydantic v2** and **FastAPI**.
-
----
-
-## 📌 Repository Status
-
-| Module | Status | Description |
-| :--- | :--- | :--- |
-| **Pydantic v2** | ✅ **Completed** | Full data validation, custom/model validators, computed fields, nested models, and serialization |
-| **FastAPI** | 🚧 **In Progress / Remaining** | Fundamental GET endpoints & parameter validation covered; CRUD, request bodies, schemas & advanced topics remaining |
+This repository contains two complete FastAPI applications along with custom Pydantic data validation schemas, machine learning pipeline integration, and a Streamlit web frontend.
 
 ---
 
-## 📁 Directory Structure
+## 📁 Repository Directory Structure
 
 ```text
 Backend-Python/
-├── Pydantic/                        # ✅ COMPLETED
-│   ├── 01_pydantic_why.py          # Motivation, BaseModel, Field constraints & metadata
-│   ├── 02_field_validator.py       # Custom field-level validators (@field_validator)
-│   ├── 03_model_validator.py       # Multi-field & root model validators (@model_validator)
-│   ├── 04_computed_field.py        # Dynamically calculated fields (@computed_field)
-│   ├── 05_nested_model.py          # Nested BaseModel schema composition
-│   └── 06_serialization.py         # Dict/JSON serialization (model_dump, model_dump_json, exclude)
-├── main.py                         # 🚧 IN PROGRESS - FastAPI endpoints (Path & Query parameter validation)
-├── patients.json                   # Sample JSON dataset for FastAPI API operations
-└── README.md                       # Repository documentation
+├── main.py                   # Patient Management System (FastAPI CRUD API)
+├── patients.json             # Persistent JSON Database for Patient Records
+├── app.py                    # ML Insurance Premium Prediction API (FastAPI)
+├── frontend.py               # Streamlit Web User Interface for ML Predictions
+├── model.pkl                 # Trained Machine Learning Model Pipeline (scikit-learn)
+├── fastapi_ml_model.ipynb    # Jupyter Notebook for Model Training & Export
+├── insurance.csv             # Dataset used for Training the ML Model
+├── Pydantic/                 # Pydantic v2 Mastery Lessons & Concepts
+│   ├── 01_pydantic_why.py
+│   ├── 02_field_validator.py
+│   ├── 03_model_validator.py
+│   ├── 04_computed_field.py
+│   ├── 05_nested_model.py
+│   └── 06_serialization.py
+├── requirements.txt          # Project Dependencies
+└── README.md                 # Project Documentation
 ```
 
 ---
 
-## ✅ Module 1: Pydantic Mastery (Completed)
+# SECTION 1: Patient Management System API 🏥
 
-### 1. Data Validation & Metadata (`01_pydantic_why.py`)
-- **Why Pydantic?**: Replaces repetitive, manual `if`/`else` type and range checks with declarative schema enforcement.
-- **`BaseModel` & `Field`**: Adding field boundaries (`gt`, `max_length`), default values, descriptions, and custom titles.
-- **Type Annotations**: Utilizing `EmailStr`, `AnyUrl`, `Annotated`, and `Optional` lists/dictionaries.
+The **Patient Management System API** (`main.py`) provides a full-featured CRUD (Create, Read, Update, Delete) RESTful service for managing patient records stored persistently in a `patients.json` file.
 
-### 2. Custom Field Validators (`02_field_validator.py`)
-- **`@field_validator`**: Creating custom validation logic for individual attributes.
-- **Validation Modes**: Using `mode='after'` (or default) to format input values (e.g. converting names to title case or validating email domains).
-
-### 3. Model & Cross-Field Validators (`03_model_validator.py`)
-- **`@model_validator(mode='after')`**: Validating dependencies between multiple fields across the model instance.
-- **Use Case**: Enforcing rules across attributes (e.g., verifying emergency contacts are present if patient `age > 60`).
-
-### 4. Computed Fields (`04_computed_field.py`)
-- **`@computed_field`**: Defining derived values dynamically calculated on access and included during model serialization.
-- **Use Case**: Calculating Body Mass Index (BMI) automatically from `weight` and `height`.
-
-### 5. Nested Models (`05_nested_model.py`)
-- **Composition**: Defining reusable schema components (e.g., `Address` model) embedded inside higher-level schemas (e.g., `Patient` model).
-
-### 6. Model Serialization (`06_serialization.py`)
-- **`model_dump()`**: Converting Pydantic model instances into Python native dictionaries.
-- **`model_dump_json()`**: Exporting models directly to JSON strings.
-- **Filtering**: Using `exclude` and `include` sets/dicts to filter out sensitive or unnecessary fields during serialization.
+### Key Features & Data Validations
+- **Pydantic Model Enforcements (`Patient`)**: Validates patient metadata including age constraints (`gt=0, lt=120`), gender literals (`Male`, `Female`, `Other`), positive height, and weight.
+- **Dynamic Computed Fields**:
+  - `@computed_field bmi`: Calculates Body Mass Index automatically using `weight / (height^2)`.
+  - `@computed_field verdict`: Dynamically evaluates BMI health category (`Underweight`, `Normal`, `Overweight`, `Obese`).
+- **Partial Update Logic (`PatientUpdate`)**: Supports updating selective fields without overwriting unmodified values (`exclude_unset=True`) while automatically recalculating BMI and verdict.
+- **Dynamic Sorting**: Filter and sort patients by physical parameters (`height`, `weight`, `bmi`) in ascending or descending order.
 
 ---
 
-## 🚧 Module 2: FastAPI Development (In Progress / Remaining)
+### 📡 API Endpoints Specification
 
-### Currently Implemented (`main.py`)
-- **Endpoints & Routing**: `@app.get("/")`, `@app.get("/about")`, `@app.get("/view")`, `@app.get("/patient/{patient_id}")`, `@app.get("/sort")`.
-- **Parameter Validation**:
-  - `Path(...)`: Path parameter validation with OpenAPI descriptions & example values.
-  - `Query(...)`: Query parameter validation, field constraints, default values, and sorting logic (`asc`/`desc`).
-- **Error Handling**: Raising structured `HTTPException` with status codes (`400`, `404`).
-
-### ⏳ Remaining / Upcoming FastAPI Topics
-- [ ] **POST, PUT, DELETE Endpoints**: Creating, updating, and deleting patient records.
-- [ ] **Request Body Validation**: Integrating Pydantic `BaseModel` schemas for API payloads.
-- [ ] **Response Models**: Defining response schemas with `response_model`.
-- [ ] **CRUD Integration**: Updating local JSON storage or database persistent layer.
-- [ ] **Dependency Injection**: Reusable dependencies (`Depends`).
-- [ ] **Middleware & Authentication**: Security protocols, JWT tokens, and CORS configuration.
+| Method | Endpoint | Description | Request Payload / Params | Response |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/` | Root Welcome Endpoint | None | `{"message": "hello world"}` |
+| `GET` | `/about` | Platform Information | None | `{"message": "campusX is an education platform..."}` |
+| `GET` | `/view` | View All Patients | None | Full dictionary of patient records |
+| `GET` | `/patient/{patient_id}` | View Specific Patient | Path Param: `patient_id` (e.g. `P001`) | Single patient data or `404 Not Found` |
+| `GET` | `/sort` | Sort Patient Records | Query Params: `sort_by` (`height`/`weight`/`bmi`), `order` (`asc`/`desc`) | Sorted list of patient objects |
+| `POST` | `/create` | Create New Patient | Request Body: `Patient` model JSON | `201 Created` status with confirmation |
+| `PUT` | `/edit/{patient_id}` | Update Patient Info | Path Param: `patient_id`, Request Body: `PatientUpdate` model | `200 OK` status with updated fields |
+| `DELETE` | `/delete/{patient_id}`| Delete Patient Record | Path Param: `patient_id` | `200 OK` status with deletion message |
 
 ---
 
-## 🛠️ How to Run
+### 💡 Example Requests
 
-### Prerequisites
-Make sure you have Python installed and set up your virtual environment:
-
-```bash
-# Activate virtual environment (Windows PowerShell)
-.\myvenv\Scripts\activate
-
-# Install required dependencies
-pip install pydantic fastapi uvicorn email-validator
+#### Creating a Patient (`POST /create`)
+```json
+{
+  "id": "P005",
+  "name": "Sarah Connor",
+  "city": "Mumbai",
+  "age": 29,
+  "gender": "Female",
+  "height": 1.65,
+  "weight": 58.0
+}
 ```
+*Calculated Response Stored:* `bmi: 21.3, verdict: "Normal"`
 
-### Running Pydantic Examples (Completed)
-
-Run any script individually to observe data validation and outputs:
-
-```bash
-python Pydantic/01_pydantic_why.py
-python Pydantic/02_field_validator.py
-python Pydantic/03_model_validator.py
-python Pydantic/04_computed_field.py
-python Pydantic/05_nested_model.py
-python Pydantic/06_serialization.py
-```
-
-### Running FastAPI Server (In Progress)
-
-Launch the development server using Uvicorn:
-
-```bash
-uvicorn main:app --reload
-```
-
-Access the interactive API documentation at:
-- **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **ReDoc**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+#### Sorting Patients (`GET /sort?sort_by=bmi&order=desc`)
+Returns all patients ordered from highest to lowest BMI.
 
 ---
 
-## 🎯 Summary
+### 🚀 Running the Patient Management System
 
-This repository tracks learning for Python backend development. **Pydantic v2** is fully wrapped up and completed. **FastAPI** is currently underway, starting with GET endpoints and parameter validation, with full CRUD, body validation, and advanced concepts to follow.
+1. Ensure dependencies are installed and activate virtual environment:
+   ```bash
+   .\myvenv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+2. Start the FastAPI Uvicorn development server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+3. Access interactive API docs at:
+   - **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   - **ReDoc**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+---
+
+# SECTION 2: ML Insurance Premium Prediction API & Frontend 🤖
+
+The **ML Insurance Premium Prediction System** (`app.py` & `frontend.py`) utilizes a trained scikit-learn machine learning pipeline (`model.pkl`) to predict a user's insurance premium risk category based on demographic, lifestyle, and health data.
+
+### Key Features & Model Preprocessing
+- **Automated Feature Engineering via Pydantic (`UserInput`)**:
+  - `bmi`: Calculated automatically from user `height` and `weight`.
+  - `lifestyle_risk`: Derived from `smoker` status and `bmi` threshold (`high`, `medium`, `low`).
+  - `age_group`: Segmented into `young` (<25), `adult` (<45), `middle_aged` (<60), and `senior` (>=60).
+  - `city_tier`: Maps input city name to Tier 1, Tier 2, or Tier 3 classification.
+- **Model Output & Confidence**: Returns the predicted category along with prediction confidence percentage and exact class probability breakdown.
+- **Interactive Streamlit Web Interface**: A visual frontend for users to enter health data and receive instant ML predictions without manual API calling.
+
+---
+
+### 📡 API Endpoints Specification
+
+| Method | Endpoint | Description | Request Payload | Response Structure |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/` | API Health Check | None | `{"message": "Insurance Premium Prediction API is running..."}` |
+| `POST` | `/predict` | Predict Insurance Premium Category | Request Body: `UserInput` JSON | `predicted_category`, `confidence`, `class_probabilities` |
+
+---
+
+### 💡 Request & Response Example
+
+#### Endpoint: `POST /predict`
+**Request Payload**:
+```json
+{
+  "age": 35,
+  "weight": 75.0,
+  "height": 1.75,
+  "income_lpa": 12.5,
+  "smoker": false,
+  "city": "Bangalore",
+  "occupation": "private_job"
+}
+```
+
+**Response Output**:
+```json
+{
+  "predicted_category": "Medium",
+  "confidence": 0.8425,
+  "class_probabilities": {
+    "High": 0.0512,
+    "Medium": 0.8425,
+    "Low": 0.1063
+  },
+  "response": {
+    "predicted_category": "Medium",
+    "confidence": 0.8425,
+    "class_probabilities": {
+      "High": 0.0512,
+      "Medium": 0.8425,
+      "Low": 0.1063
+    }
+  }
+}
+```
+
+---
+
+### 🖥️ Streamlit Web Interface (`frontend.py`)
+
+The project includes an interactive web interface built with **Streamlit** that seamlessly connects to the FastAPI ML backend.
+
+- User inputs details (Age, Height, Weight, Income, Smoker status, City, Occupation) using custom numeric sliders and selectboxes.
+- Sends payload to `http://127.0.0.1:8000/predict`.
+- Displays real-time prediction result, model confidence score, and JSON chart of class probabilities.
+
+---
+
+### 🚀 Running the ML Prediction System & Frontend
+
+1. **Start the ML FastAPI Backend**:
+   ```bash
+   uvicorn app:app --reload --port 8000
+   ```
+
+2. **Start the Streamlit UI Frontend** (in a separate terminal):
+   ```bash
+   streamlit run frontend.py
+   ```
+
+3. Open your browser at [http://localhost:8501](http://localhost:8501) to interact with the web app!
+
+---
+
+## 🛠️ Summary & Quick Commands Reference
+
+| Application | Server Command | Access URL |
+| :--- | :--- | :--- |
+| **Patient Management API** | `uvicorn main:app --reload` | [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) |
+| **ML Prediction API** | `uvicorn app:app --reload` | [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) |
+| **Streamlit Web UI** | `streamlit run frontend.py` | [http://localhost:8501](http://localhost:8501) |
