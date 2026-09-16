@@ -68,6 +68,12 @@ class UserInput(BaseModel):
             return 2
         else:
             return 3
+    
+    
+    def validate_city(cls, v):
+        if v not in tier_1_cities + tier_2_cities:
+            raise ValueError("City must be a tier 1 or tier 2 city")
+        return v
 
 @app.get("/")
 def read_root():
